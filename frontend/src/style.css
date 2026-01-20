@@ -1,0 +1,72 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #fff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+#drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  max-width: 100%;
+  height: 200px;
+  padding: 1em;
+  border: 1px solid #646cff;
+  border-radius: 4px;
+  color: slategray;
+  cursor: pointer;
+}
+
+/* #file-input {
+  display: none;
+} */
+
+#preview {
+  width: 500px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  list-style: none;
+  padding: 0;
+}
+
+#preview li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+  width: 100%;
+  height: 100px;
+}
+
+#preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}

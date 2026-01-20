@@ -2,13 +2,14 @@
 
 - for demonstration create simple frontend?
 - choose file(s)
-  - allow high volume of emails to be converted in one action
 - Parse email
-- Either
-  - turning data into json can then put into cdogs with a template and can choose format
-    - could template just me to, from, subject, message
+- turning data into json can then put into cdogs with a template and can choose format
+  - could template just me to, from, subject, message
 - Extract attachments
   - if any attachments are emails convert them too
-  - should attachments be added onto pdf/html as one file or seperate
-- Remove duplicated email chains
-- Enable metadata tagging for better search and retrieval
+  - attachements are seperate documents
+  - zip file then the applicaiton will unzip
+- Stretch goal remove duplicated email chains
+- Stretch goal enable metadata tagging for better search and retrieval
+- stretch could integrate into cdogs so it can convert .msg/.eml
+- stretch goal user could send to an email which would convert the file
