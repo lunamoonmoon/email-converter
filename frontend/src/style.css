@@ -21,6 +21,10 @@ body {
   min-height: 100vh;
 }
 
+button {
+  cursor: pointer;
+}
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -28,23 +32,43 @@ body {
   text-align: center;
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  display: flex;
+  place-items: center;
+  flex-direction: column;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
 #drop-zone {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 500px;
   max-width: 100%;
   height: 200px;
   padding: 1em;
-  border: 1px solid #646cff;
+  border: 0.15rem dashed #56565650;
   border-radius: 4px;
-  color: slategray;
+  color: #00000080;
   cursor: pointer;
 }
-
-/* #file-input {
-  display: none;
-} */
 
 #preview {
   width: 500px;
