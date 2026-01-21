@@ -11,6 +11,16 @@ const PORT = Number(process.env.PORT) || 3000;
 export async function handleRequest(req: Request): Promise<Response> {
   const url = new URL(req.url);
 
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+
+  if (req.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
   if (url.pathname !== "/convert/email" || req.method !== "POST") {
     return new Response("POST /convert/email only", { status: 404 });
   }
@@ -63,6 +73,7 @@ export async function handleRequest(req: Request): Promise<Response> {
       headers: {
         "Content-Type": "application/zip",
         "Content-Disposition": `attachment; filename="email_export_${timestamp}.zip"`,
+        ...corsHeaders
       },
     });
   } catch (err: any) {

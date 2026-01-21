@@ -2,6 +2,7 @@
 import axios from "axios";
 import fs from "fs/promises";
 import path from "path";
+import "dotenv/config";
 
 export const CDOGS_AUTH_URL = `${process.env.CDOGS_AUTH_URL}/auth/realms/comsvcauth/protocol/openid-connect/token`;
 
