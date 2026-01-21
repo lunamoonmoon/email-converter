@@ -1,11 +1,11 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: 'BC Sans';
+  line-height: 16px;
+  font-weight: 700;
 
   color-scheme: light dark;
   color: rgba(0, 0, 0, 0.87);
-  background-color: #fff;
+  background-color: #EFEFEF;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,34 +14,108 @@
 }
 
 body {
+  height: 100%;
+  width: 100%;
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 button {
+  display: flex;
+  align-items: center;
+  text-align: center;
   cursor: pointer;
+  font-family: 'BC Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  background-color: #EFEFEF;
+  color: #065A2F;
+  border: 1px solid #EFEFEF;
+  border-radius: 4px;
+}
+
+h3 {
+  width: 522px;
+  height: 36px;
+  font-family: 'BC Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.244444px;
+  color: #313132;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding: 2rem;
-  text-align: center;
+  gap: 2rem;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+#header-section {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+#file-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+}
+
+#file-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#open-modal-btn {
+  margin: 1.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #065A2F;
+  color: white;
+}
+
+#file-list {
+  text-align: left;
+  border: #00000080 1px solid;
+  min-width: 50em;
+  min-height: 20em;
+}
+
+#converted-files {
+  width: auto;
+  margin: 0;
+  padding-left: 0.5rem;
+  border-bottom: #00000080 1px solid;
 }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+display: none;
+position: fixed;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
@@ -53,6 +127,22 @@ button {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+#submit-btn {
+  background-color: #065A2F;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
 }
 
 #drop-zone {

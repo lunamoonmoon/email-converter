@@ -2,13 +2,20 @@ import './style.css'
 
 document.querySelector('#app').innerHTML = `
   <div>
-    <div id="header-section"></div>
+    <div id="header-section">
       <h1>Email to PDF Converter</h1>
       <p>Convert your email documents to PDF format easily.</p>
     </div>
+    </div>
 
     <div id="file-display">
-      <button id="open-modal-btn">Add Document</button>
+      <div id="file-header">
+        <h3>Documents</h3>
+        <button id="open-modal-btn">Add Document</button>
+      </div>
+      <div id="file-list">
+        <h3 id="converted-files">Converted Files:</h3>
+      </div>
     </div>
 
     <div id="upload-modal" class="modal">
@@ -74,6 +81,14 @@ submitBtn.addEventListener("click", async () => {
       a.download = "converted.pdf.zip";
       a.click();
       window.URL.revokeObjectURL(url);
+      // Display converted files in file-display section
+      const fileDisplay = document.getElementById("file-display");
+      const successMsg = document.createElement("p");
+      successMsg.textContent = "✓ Files converted successfully!";
+      successMsg.style.color = "green";
+      fileDisplay.appendChild(successMsg);
+      // exit modal
+      modal.style.display = "none";
     }
   } catch (error) {
     console.error("Conversion failed:", error);
@@ -84,6 +99,7 @@ submitBtn.addEventListener("click", async () => {
 const clearBtn = document.getElementById("clear-btn");
 clearBtn.addEventListener("click", () => {
   preview.textContent = "";
+  fileInput.value = "";
   submitBtn.disabled = true;
 });
 
