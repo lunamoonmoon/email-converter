@@ -42,6 +42,8 @@ export async function handleRequest(req: Request): Promise<Response> {
   const file = formData.get("file") as File | null;
   const outputFormat =
     (formData.get("outputFormat") as string | null)?.toLowerCase() ?? "both";
+  const renderer =
+    (formData.get("renderer") as "cdogs" | "carbone" | null) ?? "carbone";
 
   if (!file) {
     return new Response(JSON.stringify({ error: "Missing file" }), {
@@ -51,17 +53,18 @@ export async function handleRequest(req: Request): Promise<Response> {
   }
 
   if (file.size > 25 * 1024 * 1024) {
-    return new Response(
-      JSON.stringify({ error: "File too large (>25 MB)" }),
-      {
-        status: 413,
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    return new Response(JSON.stringify({ error: "File too large (>25 MB)" }), {
+      status: 413,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   try {
-    const zipBuffer = await convertEmailToZip(file, outputFormat as any);
+    const zipBuffer = await convertEmailToZip(
+      file,
+      outputFormat as any,
+      renderer,
+    );
 
     const timestamp = new Date()
       .toISOString()
@@ -89,7 +92,7 @@ export async function handleRequest(req: Request): Promise<Response> {
 }
 
 if (import.meta.main) {
-  serve({
+  const server = serve({
     port: PORT,
     fetch: handleRequest,
   });
@@ -97,4 +100,13 @@ if (import.meta.main) {
   console.log(
     `Email to PDF/HTML/ZIP service running on http://localhost:${PORT}`,
   );
+
+  const shutdown = () => {
+    console.log("\nShutting down server...");
+    server.stop();
+    process.exit(0);
+  };
+
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
 }

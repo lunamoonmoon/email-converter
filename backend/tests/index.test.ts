@@ -28,7 +28,7 @@ describe("API Handler", () => {
     });
     const res = await handleRequest(req);
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body = await res.json() as any;
     expect(body.error).toBe("Invalid multipart/form-data");
   });
 
@@ -42,7 +42,7 @@ describe("API Handler", () => {
     });
     const res = await handleRequest(req);
     expect(res.status).toBe(400);
-    const body = await res.json();
+    const body = await res.json() as any;
     expect(body.error).toBe("Missing file");
   });
 

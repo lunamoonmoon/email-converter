@@ -39,6 +39,7 @@ Hello World
     // Verify CDOGS was called with correct data structure
     expect(renderSpy).toHaveBeenCalled();
     const callArgs = renderSpy.mock.calls[0];
+    if (!callArgs) throw new Error("Expected renderWithCdogs to be called");
     const dataPassed = callArgs[0] as any;
     
     expect(dataPassed).toHaveProperty("email");

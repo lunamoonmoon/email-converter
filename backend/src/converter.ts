@@ -6,6 +6,7 @@ import archiver from "archiver";
 import { randomUUID } from "crypto";
 import path from "path";
 import { renderWithCdogs } from "./cdogs";
+import { renderWithCarbone } from "./carbone-renderer";
 
 export type UnifiedEmailData = {
   subject: string;
@@ -74,12 +75,6 @@ function normalizeEmailData(parsed: any, isEml: boolean): UnifiedEmailData {
       .filter((r: any) => r.recipType === type)
       .map((r: any) => r.email || r.name)
       .filter(Boolean);
-  console.log(
-    msgData.htmlBody
-      ? new TextDecoder().decode(msgData.htmlBody)
-      : msgData.body,
-  );
-  text: msgData.body;
   return {
     subject: msgData.subject || "(no subject)",
     from: msgData.senderEmail || msgData.senderName || "unknown",
@@ -123,6 +118,7 @@ function normalizeEmailData(parsed: any, isEml: boolean): UnifiedEmailData {
 export async function convertEmailToZip(
   file: File,
   outputFormat: "pdf" | "html" | "both" = "both",
+  renderer: "cdogs" | "carbone" = "carbone",
 ): Promise<Buffer> {
   const filenameLower = file.name.toLowerCase();
   const isEml = filenameLower.endsWith(".eml");
@@ -174,8 +170,19 @@ export async function convertEmailToZip(
 
   for (const fmt of formats) {
     try {
-      console.log("Rendering formats:", fmt);
-      const rendered = await renderWithCdogs(dataForTemplate, fmt);
+      console.log(`Rendering ${fmt} using ${renderer}`);
+      let rendered: Uint8Array | Buffer;
+      console.log("Data for template:", dataForTemplate);
+      if (renderer === "carbone") {
+        rendered = await renderWithCarbone(
+          dataForTemplate,
+          "./templates/email-template.html",
+          fmt,
+        );
+      } else {
+        rendered = await renderWithCdogs(dataForTemplate, fmt);
+      }
+
       archive.append(Buffer.from(rendered), {
         name: `${filenameLower}.${fmt}`,
       });
