@@ -1,3 +1,4 @@
+import { file } from 'jszip';
 import './style.css'
 
 document.querySelector('#app').innerHTML = `
@@ -25,11 +26,10 @@ document.querySelector('#app').innerHTML = `
           <input type="file" id="file-input" title="Choose Files"/>
           <div class="drag-text">or drag and drop them here</div>
         </label>
-        <ul id="preview"></ul>
         <div class="modal-buttons">
           <button id="close-btn">Close</button>
           <button id="clear-btn">Clear</button>
-          <button id="submit-btn" disabled>Submit</button>
+          <button id="submit-btn">Submit</button>
         </div>
       </div>
     </div>
@@ -43,6 +43,9 @@ var modal = document.getElementById("upload-modal");
 var btn = document.getElementById("open-modal-btn");
 btn.onclick = function() {
   modal.style.display = "block";
+  // clear prev file links
+  const fileLinks = document.querySelectorAll("#file-link");
+  fileLinks.forEach(link => link.remove());
 };
 
 // close the modal when click close or outside modal
@@ -56,18 +59,24 @@ window.onclick = function(event) {
   }
 }
 
+// clear files added
+const clearBtn = document.getElementById("clear-btn");
+const fileInput = document.getElementById("file-input");
+clearBtn.addEventListener("click", () => {
+  fileInput.value = "";
+});
+
 // submit files and convert
 const submitBtn = document.getElementById("submit-btn");
 submitBtn.addEventListener("click", async () => {
+  // get files user added
   const files = document.getElementById("file-input").files;
   if (files.length === 0) return;
-
   const formData = new FormData();
   for (const file of files) {
     formData.append("file", file);
   }
   formData.append("outputFormat", "both");
-
   try {
     const response = await fetch("http://localhost:3000/convert/email", {
       method: "POST",
@@ -75,32 +84,34 @@ submitBtn.addEventListener("click", async () => {
     });
     if (response.ok) {
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "converted.pdf.zip";
-      a.click();
-      window.URL.revokeObjectURL(url);
-      // Display converted files in file-display section
-      const fileDisplay = document.getElementById("file-display");
+      const jszip = await import('jszip');
+      const zip = new jszip.default();
+      const unzipped = await zip.loadAsync(blob);
+      const fileList = document.getElementById("file-list");
+      // for each file in zip create download link and display
+      for (const [filename, file] of Object.entries(unzipped.files)) {
+          const fileBlob = await file.async('blob');
+          const url = window.URL.createObjectURL(fileBlob);
+          const link = document.createElement('a');
+          link.id="file-link";
+          link.href = url;
+          link.download = filename;
+          link.textContent = filename;
+          fileList.appendChild(link);
+      }
+      // display success message briefly
       const successMsg = document.createElement("p");
       successMsg.textContent = "✓ Files converted successfully!";
       successMsg.style.color = "green";
-      fileDisplay.appendChild(successMsg);
+      setTimeout(() => successMsg.remove(), 3000);
+      fileList.appendChild(successMsg);
       // exit modal
       modal.style.display = "none";
+      fileInput.value = "";
     }
   } catch (error) {
     console.error("Conversion failed:", error);
   }
-});
-
-// clear files added
-const clearBtn = document.getElementById("clear-btn");
-clearBtn.addEventListener("click", () => {
-  preview.textContent = "";
-  fileInput.value = "";
-  submitBtn.disabled = true;
 });
 
 // drag and drop functionality
@@ -140,20 +151,3 @@ window.addEventListener("dragover", (e) => {
     }
   }
 });
-
-// Show file names
-const preview = document.getElementById("preview");
-function displayFileName(files) {
-  for (const file of files) {
-      const li = document.createElement("li");
-      li.appendChild(document.createTextNode(file.name));
-      preview.appendChild(li);
-  }
-  // if files enable submit button
-  submitBtn.disabled = false;
-}
-const fileInput = document.getElementById("file-input");
-fileInput.addEventListener("change", (e) => {
-  displayFileName(e.target.files);
-});
-
